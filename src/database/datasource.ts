@@ -5,11 +5,13 @@ import { ConfigService } from '@nestjs/config';
 config();
 
 const configService = new ConfigService();
+console.log('magno malte');
+console.log(configService.get('DB_HOST'));
 
-const dataSourceOptions: DataSourceOptions = {
+export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: configService.get('DB_HOST'),
-  port: parseInt(configService.get<string>('DB_PORT'), 5432),
+  port: configService.get('DB_PORT'),
   username: configService.get('DB_USERNAME'),
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_NAME'),
@@ -17,7 +19,7 @@ const dataSourceOptions: DataSourceOptions = {
   migrations: [__dirname + 'database/migrations/*{.ts,.js}'],
   synchronize: false,
   migrationsRun: false,
-  logging: configService.get('NODE_ENV') !== 'production',
+  logging: configService.get('NODE_sENV') !== 'production',
 };
 const AppDataSource = new DataSource(dataSourceOptions);
 

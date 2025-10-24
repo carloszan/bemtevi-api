@@ -11,6 +11,10 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
+class FindByUsernameDto {
+  username: string;
+}
+
 @Controller({
   path: 'users',
   version: '1',
@@ -41,5 +45,10 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Post('findByUsername')
+  findOneByUsername(@Body() dto: FindByUsernameDto) {
+    return this.usersService.findOneByUsername(dto.username);
   }
 }

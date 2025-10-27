@@ -6,14 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
-class FindByUsernameDto {
-  username: string;
-}
 
 @Controller({
   path: 'users',
@@ -28,7 +26,15 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
+  @ApiQuery({
+    name: 'username',
+    required: false,
+    description: 'Filter users by username (optional)',
+  })
+  findAll(@Query('username') username?: string) {
+    if (username) {
+      return this.usersService.findByUsername(username);
+    }
     return this.usersService.findAll();
   }
 
@@ -45,10 +51,5 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
-  }
-
-  @Post('findByUsername')
-  findOneByUsername(@Body() dto: FindByUsernameDto) {
-    return this.usersService.findOneByUsername(dto.username);
   }
 }
